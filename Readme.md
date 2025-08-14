@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
-* Студент: [Елизавета  Салий](https://up.htmlacademy.ru/javascript-individual/2/user/2650337).
-* Наставник: `Неизвестно`.
+* Студент: [Елизавета Салий](https://up.htmlacademy.ru/javascript-individual/2/user/2650337).
+* Наставник: [Владимир Вавщик](https://htmlacademy.ru/profile/id1610171).
 
 ---
 
