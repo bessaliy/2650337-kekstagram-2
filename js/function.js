@@ -28,8 +28,7 @@ function findNumbers(primalString) {
     let isNumber = newString[i];
     isNumber = parseInt(isNumber);
     if (!isNaN(isNumber)) {
-      finalNumbers += isNumber.toString()
-    }
+      finalNumbers += isNumber.toString() }
     i++;
   }
   return 'Полученное число = ' + parseInt(finalNumbers);
