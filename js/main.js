@@ -133,10 +133,8 @@ const UploadedPhotos = (amount) => {
 
   for (let i = 0; i < amount; i++) {
     let id;
-    let idAttempts = 0;
     do {
       id = getId(1, amount);
-      idAttempts++;
       if (usedId.length >= amount) {
         throw new Error(`Не могу найти уникальный ID после ${amount} попыток`);
       }
@@ -144,10 +142,8 @@ const UploadedPhotos = (amount) => {
     usedId.add(id);
 
     let url;
-    let urlAttempts = 0;
     do {
       url = getUrl(1, amount);
-      urlAttempts++;
       if (usedUrl.length >= amount) {
         throw new Error(`Не могу найти уникальный URL после ${amount} попыток`);
       }
