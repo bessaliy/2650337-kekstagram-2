@@ -1,4 +1,5 @@
-const descriptionBase = ['Тяжелый день на болоте. Заказ пиццы – единственная активность на вечер.',
+const DESCRIPTION = [
+  'Тяжелый день на болоте. Заказ пиццы – единственная активность на вечер.',
   'Этот вазон сам бросился под меня. Я лишь попытался его спасти.',
   'Моё лицо, когда ты в третий раз рассказываешь эту историю.',
   'Моментальный снимок моей продуктивности. Она только что была здесь.',
@@ -10,8 +11,10 @@ const descriptionBase = ['Тяжелый день на болоте. Заказ 
   'Енот ушёл в себя. Вернётся с добычей.',
   'Енот видит еду. Енот хочет еду. Енот применяет стратегию «увидел-украл-убежал».',
   'Я не будильник, чтобы квакать по утрам',
-  'Лягушечковое настроение: сонное'];
-const commentBase = [
+  'Лягушечковое настроение: сонное'
+];
+
+const COMMENTS = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -19,7 +22,8 @@ const commentBase = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-const namesBase = [
+
+const NAMES = [
   'Василий',
   'Иннокентий',
   'Семён',
@@ -36,7 +40,8 @@ const namesBase = [
   'Архип',
   'Геннадий'
 ];
-const surnamesBase = [
+
+const SURNAMES = [
   'Пукин',
   'Хрюндель',
   'Помидоров',
@@ -53,62 +58,63 @@ const surnamesBase = [
   'Огурцов',
   'Тапочкин'
 ];
+
 const usedCommentId = new Set ();
-function getRandom (min, max) {
+
+function getRandomInteger (min, max) {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 }
-const getId = (min, max) => getRandom(min, max);
 
-const getUrl = (min, max) => `photos/${getRandom(min, max)}.jpg`;
-const getDescription = () => descriptionBase[getRandom(0, (descriptionBase.length - 1))];
-const getLikesAmount = (min, max) => getRandom(min, max);
-const getCommentAmount = (min, max) => getRandom(min, max);
-const getCommentId = (min, max) => getRandom(min, max);
-const getCommentAvatar = (min, max) => `img/avatar-${getRandom(min, max)}.svg`;
+function getUniqueRandom (usedSet, min, max, errorMessage) {
+  let value;
+  do {
+    value = getRandomInteger(min, max);
+    if (usedSet.size >= max) {
+      throw new Error(errorMessage);
+    }
+  } while (usedSet.has(value));
+  usedSet.add(value);
+  return value;
+}
+
 function getCommentMessage() {
   let message = [];
   let usedMessages = [];
-  const messageAmount = getRandom(1, 2);
+  const messageAmount = getRandomInteger(1, 2);
   for (let i = 1; i <= messageAmount; i++) {
-    let newMessage = commentBase[getRandom(0, (commentBase.length - 1))];
+    let newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
     if(usedMessages.includes(newMessage)) {
-      newMessage = commentBase[getRandom(0, (commentBase.length - 1))];
+      newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
     }
     usedMessages.push(newMessage);
     message.push(newMessage);
   }
   return message.join(' ');
 }
+
 function getCommentName(name, surname) {
-  let randomName = name[getRandom(0, (name.length - 1))];
-  let randomSurname = surname[getRandom(0, (surname.length - 1))];
+  let randomName = name[getRandomInteger(0, (name.length - 1))];
+  let randomSurname = surname[getRandomInteger(0, (surname.length - 1))];
   return `${randomName} ${randomSurname}`;
 }
 
 function generateComment () {
   const comment = [];
-  // const usedCommentId = new Set ();
-    let id;
-    do {
-      id = getCommentId(1, 750);
-      if (usedCommentId.size > 750) {
-        throw new Error(`Не могу найти уникальный ID комментария после 750 попыток`);
-      }
-    } while (usedCommentId.has(id));
-    usedCommentId.add(id);
+    const id = getUniqueRandom(usedCommentId, 1, 750, `Не могу найти уникальный ID комментария после 750 попыток`);
 
     comment.push({
       commentId: id,
-      commentAvatar: getCommentAvatar(1, 6),
+      commentUrl: `img/avatar-${getRandomInteger(1, 6)}.svg`,
       commentMessage: getCommentMessage(),
-      commentName: getCommentName(namesBase, surnamesBase)
+      commentName: getCommentName(NAMES, SURNAMES)
     });
 
-return comment;
+  return comment;
 }
+
 const Comments = (amount) => {
   let commentBatch = [];
   for (let i = 0; i < amount; i++) {
@@ -116,40 +122,29 @@ const Comments = (amount) => {
   }
   return commentBatch;
 }
+
 function photoDescription (id, url) {
 
   return {
     id: id,
     url: url,
-    description: getDescription(),
-    likes: getLikesAmount(15, 200),
-    comment: Comments(getCommentAmount (1, 30))
+    description: DESCRIPTION[getRandomInteger(0, (DESCRIPTION.length - 1))],
+    likes: getRandomInteger(15, 200),
+    comment: Comments(getRandomInteger(1, 30))
   }
 }
+
 const UploadedPhotos = (amount) => {
   const usedId = new Set ();
   const usedUrl = new Set ();
   const allPhotos = [];
+  let url;
 
   for (let i = 0; i < amount; i++) {
-    let id;
-    do {
-      id = getId(1, amount);
-      if (usedId.length >= amount) {
-        throw new Error(`Не могу найти уникальный ID после ${amount} попыток`);
-      }
-    } while (usedId.has(id));
-    usedId.add(id);
+    const id = getUniqueRandom (usedId, 1, amount,`Не могу найти уникальный ID после ${amount} попыток`);
 
-    let url;
-    do {
-      url = getUrl(1, amount);
-      if (usedUrl.length >= amount) {
-        throw new Error(`Не могу найти уникальный URL после ${amount} попыток`);
-      }
-    } while (usedUrl.has(url));
-    usedUrl.add(url);
-
+    const urlNumber = getUniqueRandom(usedUrl, 1, amount, `Не могу найти уникальный URL после ${amount} попыток`);
+    url = `photos/${urlNumber}.jpg`;
     allPhotos.push(photoDescription(id, url));
   }
   return allPhotos;
