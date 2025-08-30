@@ -1,3 +1,3 @@
-import { UploadedPhotos } from "./data-generator.js";
-const generatedMassive = UploadedPhotos(25);
-console.log(generatedMassive);
+import { UploadedPhotos } from "./utils.js";
+
+console.log(UploadedPhotos(25));

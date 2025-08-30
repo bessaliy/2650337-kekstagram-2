@@ -1,6 +1,6 @@
-import {DESCRIPTION, COMMENTS, NAMES, SURNAMES} from "./data-storage.js";
+import {DESCRIPTION, comments, NAMES, SURNAMES} from "./const.js";
 
-const usedCommentId = new Set ();
+const usedCommentId = new Set();
 
 function getRandomInteger (min, max) {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
@@ -26,9 +26,9 @@ function getCommentMessage() {
   let usedMessages = [];
   const messageAmount = getRandomInteger(1, 2);
   for (let i = 1; i <= messageAmount; i++) {
-    let newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
+    let newMessage = comments[getRandomInteger(0, (comments.length - 1))];
     if(usedMessages.includes(newMessage)) {
-      newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
+      newMessage = comments[getRandomInteger(0, (comments.length - 1))];
     }
     usedMessages.push(newMessage);
     message.push(newMessage);
@@ -56,7 +56,7 @@ function generateComment () {
   return comment;
 }
 
-const Comments = (amount) => {
+const comments = (amount) => {
   let commentBatch = [];
   for (let i = 0; i < amount; i++) {
     commentBatch.push(generateComment());
@@ -71,13 +71,13 @@ function photoDescription (id, url) {
     url: url,
     description: DESCRIPTION[getRandomInteger(0, (DESCRIPTION.length - 1))],
     likes: getRandomInteger(15, 200),
-    comment: Comments(getRandomInteger(1, 30))
+    comment: comments(getRandomInteger(1, 30))
   }
 }
 
-const UploadedPhotos = (amount) => {
-  const usedId = new Set ();
-  const usedUrl = new Set ();
+const uploadedPhotos = (amount) => {
+  const usedId = new Set();
+  const usedUrl = new Set();
   const allPhotos = [];
   let url;
 
@@ -91,4 +91,4 @@ const UploadedPhotos = (amount) => {
   return allPhotos;
 }
 
-export { UploadedPhotos };
+export { uploadedPhotos };

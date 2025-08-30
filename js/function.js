@@ -38,16 +38,14 @@ console.log(findNumbers(25));
 console.log(findNumbers('число один'));
 
 function checkMeeting(workStart, workEnd, timeStart, meetingDuration) {
+  const convertToMinutes = function (time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
 
-  let dayStart = workStart.split(':').map(Number);
-  let dayStartMinutes = dayStart[0] * 60 + dayStart[1];
-  let dayEnd = workEnd.split(':').map(Number);
-  let dayEndMinutes = dayEnd[0] * 60 + dayEnd[1];
-  let meetingStart = timeStart.split(':').map(Number);
-  let meetingStartMinutes = meetingStart[0] * 60 + meetingStart[1];
-  let meetingEndMinutes = meetingStartMinutes + meetingDuration;
+  let meetingEndMinutes = convertToMinutes(timeStart) + meetingDuration;
 
-  return (meetingStartMinutes >= dayStartMinutes && meetingEndMinutes <= dayEndMinutes);
+  return (convertToMinutes(timeStart) >= convertToMinutes(workStart) && meetingEndMinutes <= convertToMinutes(workEnd));
 }
 
 console.log(checkMeeting('08:00', '17:30', '14:00', 90));
