@@ -1,4 +1,4 @@
-import {DESCRIPTION, comments, NAMES, SURNAMES} from "./const.js";
+import {DESCRIPTION, COMMENTS, NAMES, SURNAMES} from "./const.js";
 
 const usedCommentId = new Set();
 
@@ -26,9 +26,9 @@ function getCommentMessage() {
   let usedMessages = [];
   const messageAmount = getRandomInteger(1, 2);
   for (let i = 1; i <= messageAmount; i++) {
-    let newMessage = comments[getRandomInteger(0, (comments.length - 1))];
+    let newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
     if(usedMessages.includes(newMessage)) {
-      newMessage = comments[getRandomInteger(0, (comments.length - 1))];
+      newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
     }
     usedMessages.push(newMessage);
     message.push(newMessage);
