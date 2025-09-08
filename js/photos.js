@@ -1,8 +1,11 @@
 import { photoTemplate } from "./templates.js";
 import { uploadedPhotos } from "./utils.js";
-const container = document.querySelector('.pictures');
+
+export const container = document.querySelector('.pictures');
 const photosData = uploadedPhotos(25);
 const photosListFragment = document.createDocumentFragment();
+
+export const photosTotal = [];
 
 photosData.forEach((picture) => {
   const template = photoTemplate.cloneNode(true);
@@ -16,9 +19,13 @@ photosData.forEach((picture) => {
   template.querySelector('.picture__comments').textContent = picture.comment.length;
 
   photosListFragment.appendChild(template);
+
+  photosTotal.push(picture);
 });
 
 container.appendChild(photosListFragment);
+
+console.log(photosTotal);
 
 
 

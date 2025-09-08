@@ -1,4 +1,4 @@
-import {DESCRIPTION, COMMENTS, NAMES, SURNAMES} from "./const.js";
+import {DESCRIPTION, COMMENTS, NAMES, SURNAMES} from './const.js';
 
 const usedCommentId = new Set();
 
