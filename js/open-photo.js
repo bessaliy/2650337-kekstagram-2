@@ -7,6 +7,9 @@ const closeBigPicture = document.querySelector('.big-picture__cancel');
 const thumbnails = container.querySelectorAll('.picture');
 const showMoreComments = openBigPicture.querySelector('.social__comments-loader');
 
+const buttonText = showMoreComments.textContent;
+const buttonColor = showMoreComments.style.color;
+
 function handleEscapeKey(evt) {
   if (evt.key === 'Escape') {
     closeModal();
@@ -76,6 +79,10 @@ thumbnails.forEach(thumbnail => {
 
     } else {
       openBigPicture.querySelector('.comments-loader').classList.remove('hidden');
+      // showMoreComments.disabled = false;
+      showMoreComments.textContent = buttonText;
+      showMoreComments.style.color = buttonColor;
+
       let shownCommentsAmount = 5;
 
       openBigPicture.querySelector('.social__comment-shown-count').textContent = shownCommentsAmount;
@@ -89,23 +96,26 @@ thumbnails.forEach(thumbnail => {
       commentList.replaceChildren(commentFragment);
 
       showMoreComments.addEventListener('click', function () {
-      if (restComments.length >=0) {
+        if (restComments.length >=0) {
+
+          showMoreComments.textContent = buttonText;
+          showMoreComments.style.color = buttonColor;
           showingComments = restComments.splice(0, 5);
           shownCommentsAmount += showingComments.length;
 
-        renderComments (showingComments, commentList, commentFragment);
+          renderComments (showingComments, commentList, commentFragment);
 
           commentList.append(commentFragment);
           openBigPicture.querySelector('.social__comment-shown-count').textContent = shownCommentsAmount;
-      }
+        }
 
-      if (restComments.length === 0) {
-        showMoreComments.disabled = true;
-        showMoreComments.textContent = 'Все комментарии загружены';
-        showMoreComments.style.color = '#C0C0C0';
-      }
+        if (restComments.length === 0) {
+          // showMoreComments.disabled = true;
+          showMoreComments.textContent = 'Все комментарии загружены';
+          showMoreComments.style.color = '#C0C0C0';
+        }
 
-    });
+      });
     }
 
     document.addEventListener('keydown', handleEscapeKey);
