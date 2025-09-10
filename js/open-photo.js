@@ -7,13 +7,12 @@ const openBigPicture = document.querySelector('.big-picture');
 const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');
 const thumbnails = container.querySelectorAll('.picture');
-const commentFragment = document.createDocumentFragment();
-
 
 thumbnails.forEach(thumbnail => {
   thumbnail.addEventListener('click', function () {
-    let commentAmount = openBigPicture.querySelector('.social__comment-total-count').textContent;
+    let commentAmount = openBigPicture.querySelector('.social__comment-total-count');
     let commentList = openBigPicture.querySelector('.social__comments');
+    const commentFragment = document.createDocumentFragment();
 
     openBigPicture.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
@@ -25,32 +24,39 @@ thumbnails.forEach(thumbnail => {
 
     openBigPicture.querySelector('.likes-count').textContent = thumbnail.querySelector('.picture__likes').textContent;
     openBigPicture.querySelector('.social__caption').textContent = thumbnail.querySelector('img').alt;
-    commentAmount = thumbnail.querySelector('.picture__comments').textContent;
+    commentAmount.textContent = thumbnail.querySelector('.picture__comments').textContent;
 
-    if (parseInt(commentAmount, 10) <= 5) {
-      openBigPicture.querySelector('.social__comment-shown-count').textContent = commentAmount;
-    }
+    // if (parseInt(commentAmount, 10) <= 5) {
+    //   openBigPicture.querySelector('.social__comment-shown-count').textContent = commentAmount;
+    // } - это когда будет список, показывающий 5 штук
+
+    openBigPicture.querySelector('.social__comment-shown-count').textContent = commentAmount.textContent;
 
     const thisPhoto = photosTotal.find(photo => photo.url.textContent === bigPicture.querySelector('img').src.textContent);
     console.log(thisPhoto);
     const thisPhotoComments = thisPhoto.comment;
     console.log(thisPhotoComments);
 
-    thisPhotoComments.forEach((comment) => {
-      const template = commentList.cloneNode(true);
+    thisPhotoComments.forEach(([comment]) => {
+      const template = commentList.querySelector('li').cloneNode(true);
+
+      console.log(comment);
+      console.log(comment.commentName);
+      console.log(comment.commentUrl);
 
       const image = template.querySelector('.social__picture');
       image.alt = comment.commentName;
       image.src = comment.commentUrl;
 
     let commentText = template.querySelector('.social__text');
-      commentText.textContent = comment.commentMessage.textContent;
+      commentText.textContent = comment.commentMessage;
 
       commentFragment.appendChild(template);
+
     });
 
-    commentList.append(commentFragment);
-
+    commentList.replaceChildren(commentFragment);
+    commentFragment.replaceChildren();
     document.addEventListener('keydown', function (evt) {
       if (evt.key === 'Escape') {
         openBigPicture.classList.add('hidden');
