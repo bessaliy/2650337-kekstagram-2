@@ -1,3 +1,3 @@
-import { uploadedPhotos } from "./utils.js";
-import "./photos.js";
-console.log(uploadedPhotos(25));
+
+import './photos.js';
+import './open-photo.js';
