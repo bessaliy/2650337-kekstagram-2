@@ -1,6 +1,8 @@
 import './photos.js';
 import { container, photosTotal } from './photos.js';
 
+const COMMENTS_ON_SHOW = 5;
+
 const openBigPicture = document.querySelector('.big-picture');
 const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');
@@ -9,6 +11,8 @@ const showMoreComments = openBigPicture.querySelector('.social__comments-loader'
 
 const buttonText = showMoreComments.textContent;
 const buttonColor = showMoreComments.style.color;
+
+let currentLoadMoreHandler = null;
 
 function handleEscapeKey(evt) {
   if (evt.key === 'Escape') {
@@ -22,6 +26,11 @@ function closeModal() {
 
   document.removeEventListener('keydown', handleEscapeKey);
   closeBigPicture.removeEventListener('click', closeModal);
+
+  if (currentLoadMoreHandler) {
+    showMoreComments.removeEventListener('click', currentLoadMoreHandler);
+    currentLoadMoreHandler = null;
+  }
 }
 
 function renderComments(comments, commentList, fragment) {
@@ -32,7 +41,7 @@ function renderComments(comments, commentList, fragment) {
     image.alt = comment.commentName;
     image.src = comment.commentUrl;
 
-    let commentText = template.querySelector('.social__text');
+    const commentText = template.querySelector('.social__text');
     commentText.textContent = comment.commentMessage;
 
     fragment.appendChild(template);
@@ -41,13 +50,19 @@ function renderComments(comments, commentList, fragment) {
   return fragment;
 }
 
-thumbnails.forEach(thumbnail => {
-  thumbnail.addEventListener('click', function () {
+thumbnails.forEach((thumbnail) => {
+  thumbnail.addEventListener('click', () => {
+
+    if (currentLoadMoreHandler) {
+      showMoreComments.removeEventListener('click', currentLoadMoreHandler);
+      currentLoadMoreHandler = null;
+    }
+
     document.removeEventListener('keydown', handleEscapeKey);
     closeBigPicture.removeEventListener('click', closeModal);
 
-    let commentAmount = openBigPicture.querySelector('.social__comment-total-count');
-    let commentList = openBigPicture.querySelector('.social__comments');
+    const commentAmount = openBigPicture.querySelector('.social__comment-total-count');
+    const commentList = openBigPicture.querySelector('.social__comments');
     const commentFragment = document.createDocumentFragment();
 
     openBigPicture.classList.remove('hidden');
@@ -60,8 +75,7 @@ thumbnails.forEach(thumbnail => {
     openBigPicture.querySelector('.social__caption').textContent = thumbnail.querySelector('img').alt;
     commentAmount.textContent = thumbnail.querySelector('.picture__comments').textContent;
 
-    const thisPhoto = photosTotal.find(function(photo) {
-
+    const thisPhoto = photosTotal.find((photo) => {
       const bigPictureImg = bigPicture.querySelector('img');
       const bigPictureSrc = bigPictureImg.src;
 
@@ -74,48 +88,50 @@ thumbnails.forEach(thumbnail => {
       openBigPicture.querySelector('.comments-loader').classList.add('hidden');
       openBigPicture.querySelector('.social__comment-shown-count').textContent = commentAmount.textContent;
 
-      renderComments (thisPhotoComments, commentList, commentFragment);
+      renderComments(thisPhotoComments, commentList, commentFragment);
       commentList.replaceChildren(commentFragment);
 
     } else {
       openBigPicture.querySelector('.comments-loader').classList.remove('hidden');
-      // showMoreComments.disabled = false;
+
       showMoreComments.textContent = buttonText;
       showMoreComments.style.color = buttonColor;
+      showMoreComments.disabled = false;
+      showMoreComments.style.pointerEvents = '';
 
-      let shownCommentsAmount = 5;
+      let shownCommentsAmount = COMMENTS_ON_SHOW;
 
       openBigPicture.querySelector('.social__comment-shown-count').textContent = shownCommentsAmount;
 
-      let restComments = thisPhotoComments;
-      let showingComments = restComments.splice(0, 5);
+      const restComments = [...thisPhotoComments];
+      let showingComments = restComments.splice(0, COMMENTS_ON_SHOW);
 
-
-      renderComments (showingComments, commentList, commentFragment);
+      renderComments(showingComments, commentList, commentFragment);
 
       commentList.replaceChildren(commentFragment);
 
-      showMoreComments.addEventListener('click', function () {
-        if (restComments.length >=0) {
-
-          showMoreComments.textContent = buttonText;
-          showMoreComments.style.color = buttonColor;
-          showingComments = restComments.splice(0, 5);
+      // что оно в себя пишет?
+      currentLoadMoreHandler = () => {
+        if (restComments.length > 0) {
+          showingComments = restComments.splice(0, COMMENTS_ON_SHOW);
           shownCommentsAmount += showingComments.length;
 
-          renderComments (showingComments, commentList, commentFragment);
+          renderComments(showingComments, commentList, commentFragment);
 
           commentList.append(commentFragment);
           openBigPicture.querySelector('.social__comment-shown-count').textContent = shownCommentsAmount;
         }
 
         if (restComments.length === 0) {
-          // showMoreComments.disabled = true;
+          showMoreComments.disabled = true;
+          showMoreComments.style.pointerEvents = 'none';
+
           showMoreComments.textContent = 'Все комментарии загружены';
           showMoreComments.style.color = '#C0C0C0';
         }
+      };
 
-      });
+      showMoreComments.addEventListener('click', currentLoadMoreHandler);
     }
 
     document.addEventListener('keydown', handleEscapeKey);
