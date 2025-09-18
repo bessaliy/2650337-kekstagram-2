@@ -110,7 +110,6 @@ thumbnails.forEach((thumbnail) => {
 
       commentList.replaceChildren(commentFragment);
 
-      // что оно в себя пишет?
       currentLoadMoreHandler = () => {
         if (restComments.length > 0) {
           showingComments = restComments.splice(0, COMMENTS_ON_SHOW);
