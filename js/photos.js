@@ -1,32 +1,39 @@
 import { photoTemplate } from "./templates.js";
-import { uploadedPhotos } from "./utils.js";
+import { loadPhotos } from "./api.js";
 
 export const container = document.querySelector('.pictures');
-const photosData = uploadedPhotos(25);
-const photosListFragment = document.createDocumentFragment();
-
 export const photosTotal = [];
 
-photosData.forEach((picture) => {
-  const template = photoTemplate.cloneNode(true);
+const loadAndRenderPhotos = async () => {
+  try {
+    const photosData = await loadPhotos();
+    console.log('Данные загружены:', photosData);
 
-  const image = template.querySelector('.picture__img');
-  image.alt = picture.description;
-  image.src = picture.url;
+    const photosListFragment = document.createDocumentFragment();
 
-  template.querySelector('.picture__likes').textContent = picture.likes;
+    photosData.forEach((picture) => {
+      const template = photoTemplate.cloneNode(true);
 
-  template.querySelector('.picture__comments').textContent = picture.comment.length;
+      const image = template.querySelector('.picture__img');
+      image.alt = picture.description;
+      image.src = picture.url;
 
-  photosListFragment.appendChild(template);
+      template.querySelector('.picture__likes').textContent = picture.likes;
+      template.querySelector('.picture__comments').textContent = picture.comments.length;
 
-  photosTotal.push(picture);
-});
+      photosListFragment.appendChild(template);
+      photosTotal.push(picture);
+    });
 
-container.appendChild(photosListFragment);
+    container.appendChild(photosListFragment);
+    console.log('Все фото:', photosTotal);
 
-console.log(photosTotal);
+  } catch (error) {
+    console.error('Ошибка загрузки:', error);
+  }
+};
 
+document.addEventListener('DOMContentLoaded', loadAndRenderPhotos);
 
 
 
