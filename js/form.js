@@ -3,9 +3,14 @@ const formOpener = document.querySelector('.img-upload__start');
 const formWindow = document.querySelector('.img-upload__overlay');
 const formCloseBtn = document.querySelector('.img-upload__cancel');
 
+
 const hashRegular = new RegExp('^#[a-zа-яё0-9]{1,19}$', 'i');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+
+import {sendTemplate, errorTemplate} from "./templates.js";
+const formSuccessBtn = sendTemplate.querySelector('.success__button');
+const formErrorBtn = errorTemplate.querySelector('.error__button');
 
 function handleEscapeKey(evt) {
   if (evt.key === 'Escape') {
@@ -24,6 +29,17 @@ function handleEscapeKey(evt) {
     }
   }
 }
+
+//Добавьте обработчик отправки формы, если ещё этого не сделали, который бы отменял действие формы по умолчанию и
+// отправлял данные формы посредством fetch на сервер.
+//
+// Реализуйте возвращение формы в исходное состояние при успешной отправке, а также показ сообщения пользователю.
+//
+// Если при отправке данных произошла ошибка запроса, покажите соответствующее сообщение.
+//
+// Доработайте обработчик закрытия формы, чтобы кроме закрытия формы он сбрасывал введённые пользователем данные и
+// возвращал форму в исходное состояние. Аналогичным образом обработайте нажатие на кнопку сброса.
+
 
 function switchForm (param1, param2) {
   formWindow.classList[param1]('hidden');
