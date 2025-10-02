@@ -1,5 +1,5 @@
 import { photoTemplate, errorTemplate } from "./templates.js";
-import {getData, Method, Route, ErrorText, getData} from "./api.js";
+import {getData, Method, Route, ErrorText} from "./api.js";
 
 export const container = document.querySelector('.pictures');
 const photosTotal = [];
@@ -21,16 +21,12 @@ let currentLoadMoreHandler = null;
 const loadAndRenderPhotos = async () => {
   try {
     const photosData = await getData(Route.GET_DATA, Method.GET);
-    console.log('Данные загружены:', photosData);
 
     const photosListFragment = document.createDocumentFragment();
-
-    //Создаем миниатюры для каждой подгруженной с сервера фотки
 
     photosData.forEach((picture) => {
       const template = photoTemplate.cloneNode(true);
       template.photoData = picture;
-      console.log('Pictures comments are: ', picture.comments);
 
       const image = template.querySelector('.picture__img');
       image.alt = picture.description;
@@ -69,19 +65,15 @@ function showDataError(method) {
   }, 5000);
 }
 
-//Рендерим миниатюры фото и пытаемся открыть модалку
 document.addEventListener('DOMContentLoaded', loadAndRenderPhotos);
-
 
 function handleEscapeKey(evt) {
   if (evt.key === 'Escape') {
-    console.log('ESC detected, closing modal');
     closeModal();
   }
 }
 
 function closeModal() {
-  console.log('closeModal called');
   openBigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
 
@@ -131,10 +123,8 @@ function onClickOpenModal (thumbnail) {
   openBigPicture.querySelector('.social__caption').textContent = thumbnail.querySelector('img').alt;
 
   const thisPhotoComments = thumbnail.photoData.comments;
-  console.log(thisPhotoComments);
 
   commentAmount.textContent = thisPhotoComments.length.toString();
-  console.log('Кол-во комментариев к фото: ',thisPhotoComments.length );// ОСТАНОВИЛАСЬ ЗДЕСЬ
 
   if (thisPhotoComments.length <= 5) { //Показываем 5 комментов
     openBigPicture.querySelector('.comments-loader').classList.add('hidden');
@@ -175,8 +165,5 @@ function onClickOpenModal (thumbnail) {
 
     showMoreComments.addEventListener('click', currentLoadMoreHandler);
   }
-  console.log('Adding event listeners'); // ← ДОБАВЬТЕ
   changeEventListeners('add');
-
-  console.log('Event listeners added'); // ← ДОБАВЬТЕ
 }
