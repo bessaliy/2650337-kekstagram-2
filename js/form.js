@@ -40,10 +40,24 @@ function handleEscapeKey(evt) {
     }
   }
 }
-
+function onEscPress(evt) {
+  if (evt.key === 'Escape') {
+    closeSuccessModal();
+  }
+}
+function onOutsideClick(evt) {
+  if (!evt.target.closest('.success__inner')) {
+    closeSuccessModal();
+  }
+}
 function switchForm(param1, param2) {
   formWindow.classList[param1]('hidden');
   document.querySelector('body').classList[param2]('modal-open');
+}
+function changeEventListeners(action) {
+  const method = `${action}EventListener`;
+  document[method]('keydown', onEscPress);
+  document[method]('click', onOutsideClick);
 }
 
 function resetForm() {
@@ -97,7 +111,7 @@ function validateHashContent(value) {
 }
 
 function validateHashAmount(value) {
-  if (value.trim() === '') {
+  if (!value.trim()) {
     return true;
   }
   const hashtags = value.split(' ');
@@ -105,7 +119,7 @@ function validateHashAmount(value) {
 }
 
 function validateHashRepeat(value) {
-  if (value.trim() === '') {
+  if (!value.trim()) {
     return true;
   }
   const hashtags = value.split(' ');
@@ -142,33 +156,18 @@ pristine.addValidator(
 );
 
 function showSuccessMessage() {
-  const successElement = sendTemplate.content.cloneNode(true);
-  const successModal = successElement.querySelector('.success');
+  const successModal = sendTemplate.content.cloneNode(true).querySelector('.success');
   const successButton = successModal.querySelector('.success__button');
 
   document.body.appendChild(successModal);
 
   function closeSuccessModal() {
     successModal.remove();
-    document.removeEventListener('keydown', onEscPress);
-    document.removeEventListener('click', onOutsideClick);
-  }
-
-  function onEscPress(evt) {
-    if (evt.key === 'Escape') {
-      closeSuccessModal();
-    }
-  }
-
-  function onOutsideClick(evt) {
-    if (!evt.target.closest('.success__inner')) {
-      closeSuccessModal();
-    }
+    changeEventListeners('remove');
   }
 
   successButton.addEventListener('click', closeSuccessModal);
-  document.addEventListener('keydown', onEscPress);
-  document.addEventListener('click', onOutsideClick);
+  changeEventListeners('add');
 }
 
 function showErrorMessage() {
@@ -180,31 +179,16 @@ function showErrorMessage() {
 
   function closeErrorModal() {
     errorModal.remove();
-    document.removeEventListener('keydown', onEscPress);
-    document.removeEventListener('click', onOutsideClick);
-  }
-
-  function onEscPress(evt) {
-    if (evt.key === 'Escape') {
-      closeErrorModal();
-    }
-  }
-
-  function onOutsideClick(evt) {
-    if (!evt.target.closest('.error__inner')) {
-      closeErrorModal();
-    }
+    changeEventListeners('remove');
   }
 
   errorButton.addEventListener('click', closeErrorModal);
-  document.addEventListener('keydown', onEscPress);
-  document.addEventListener('click', onOutsideClick);
+  changeEventListeners('add');
 }
 
 form.addEventListener('submit', async (evt) => {
   evt.preventDefault();
 
-  // Проверяем валидность формы
   if (!pristine.validate()) {
     return;
   }
