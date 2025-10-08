@@ -2,14 +2,14 @@ import {DESCRIPTION, COMMENTS, NAMES, SURNAMES} from './const.js';
 
 const usedCommentId = new Set();
 
-function getRandomInteger (min, max) {
+export function getRandomInteger (min, max) {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 }
 
-function getUniqueRandom (usedSet, min, max, errorMessage) {
+export function getUniqueRandom (usedSet, min, max, errorMessage) {
   let value;
   do {
     value = getRandomInteger(min, max);

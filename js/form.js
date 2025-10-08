@@ -1,5 +1,5 @@
 import { BASE_URL, Route, Method, ErrorText } from './api.js';
-import {sendTemplate, sendErrorTemplate} from "./templates.js";
+import {sendTemplate, sendErrorTemplate} from './templates.js';
 
 const form = document.querySelector('.img-upload__form');
 const formOpener = document.querySelector('.img-upload__start');
