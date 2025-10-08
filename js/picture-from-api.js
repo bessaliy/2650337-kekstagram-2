@@ -1,5 +1,5 @@
-import { photoTemplate, errorTemplate } from "./templates.js";
-import {getData, Method, Route, ErrorText} from "./api.js";
+import { photoTemplate, errorTemplate } from './templates.js';
+import {getData, Method, Route, ErrorText} from './api.js';
 
 export const container = document.querySelector('.pictures');
 const photosTotal = [];
@@ -16,35 +16,36 @@ function changeEventListeners(action) {
   document[method]('keydown', handleEscapeKey);
   closeBigPicture[method]('click', closeModal);
 }
+export function renderPhotos(picture) {
+  const template = photoTemplate.cloneNode(true);
+  const image = template.querySelector('.picture__img');
+  let fragment = document.createDocumentFragment();
 
+  template.photoData = picture;
+  image.alt = picture.description;
+  image.src = picture.url;
+
+  template.querySelector('.picture__likes').textContent = picture.likes;
+  template.querySelector('.picture__comments').textContent = picture.comments.length;
+
+  fragment.appendChild(template);
+
+  template.addEventListener('click', () => {
+    onClickOpenModal(template);
+  });
+  container.append(fragment);
+}
 let currentLoadMoreHandler = null;
-const loadAndRenderPhotos = async () => {
+export let photosData = [];
+export const loadAndRenderPhotos = async () => {
   try {
-    const photosData = await getData(Route.GET_DATA, Method.GET);
-
-    const photosListFragment = document.createDocumentFragment();
-
+    photosData = await getData(Route.GET_DATA, Method.GET);
     photosData.forEach((picture) => {
-      const template = photoTemplate.cloneNode(true);
-      template.photoData = picture;
 
-      const image = template.querySelector('.picture__img');
-      image.alt = picture.description;
-      image.src = picture.url;
-
-      template.querySelector('.picture__likes').textContent = picture.likes;
-      template.querySelector('.picture__comments').textContent = picture.comments.length;
-
-      photosListFragment.appendChild(template);
+      renderPhotos(picture);
       photosTotal.push(picture);
 
-      template.addEventListener('click', () => {
-        onClickOpenModal(template);
-      });
     });
-
-    container.appendChild(photosListFragment);
-
   } catch (error) {
     showDataError(Method.GET);
   }
@@ -100,7 +101,7 @@ function renderComments(comments, commentList, fragment) {
   });
   return fragment;
 }
-function onClickOpenModal (thumbnail) {
+export function onClickOpenModal (thumbnail) {
   if (currentLoadMoreHandler) {
     showMoreComments.removeEventListener('click', currentLoadMoreHandler);
     currentLoadMoreHandler = null;
