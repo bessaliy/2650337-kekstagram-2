@@ -1,5 +1,6 @@
 import {container, photosData, loadAndRenderPhotos, renderPhotos} from './picture-from-api.js';
 import {getUniqueRandom} from './utils.js';
+import {debounce} from "./main.js";
 
 let filterContainer = document.querySelector('.img-filters');
 filterContainer.classList.remove('img-filters--inactive');
@@ -52,9 +53,12 @@ function showDiscussed() {
     renderPhotos(picture);
   });
 }
+const debouncedShowDefault = debounce(showDefault);
+const debouncedShowRandom = debounce(showRandom);
+const debouncedShowDiscussed = debounce(showDiscussed);
 
-buttonDefault.addEventListener('click', showDefault);
-buttonRandom.addEventListener('click', showRandom);
-buttonDiscussed.addEventListener('click', showDiscussed);
+buttonDefault.addEventListener('click', debouncedShowDefault);
+buttonRandom.addEventListener('click', debouncedShowRandom);
+buttonDiscussed.addEventListener('click', debouncedShowDiscussed);
 
 
