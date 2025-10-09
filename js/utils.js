@@ -58,7 +58,7 @@ function generateComment () {
 }
 
 const comments = (amount) => {
-  let commentBatch = [];
+  const commentBatch = [];
   for (let i = 0; i < amount; i++) {
     commentBatch.push(generateComment());
   }

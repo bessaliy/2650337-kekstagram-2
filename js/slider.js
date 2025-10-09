@@ -111,19 +111,19 @@ scaleMinus.addEventListener('click', () => {
   if(scale <= 100 && scale > 0 ) {
     scale -= 25;
     scalePercent = scale / 100;
-    scaleValue.value = scale + '%';
-    imageToScale.style.transform = 'scale(' + scalePercent + ')';
+    scaleValue.value = `${scale}%`;
+    imageToScale.style.transform = `scale(${scalePercent})`;
   }
 });
 scalePlus.addEventListener('click', () => {
-  let scale = parseInt(scaleValue.value);
+  let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if (scale < 100  && scale >= 0 ) {
+  if(scale < 100 && scale >= 0 ) {
     scale += 25;
     scalePercent = scale / 100;
-    scaleValue.value = scale + '%';
-    imageToScale.style.transform = 'scale(' + scalePercent + ')';
+    scaleValue.value = `${scale}%`;
+    imageToScale.style.transform = `scale(${scalePercent})`;
   }
 });
 
