@@ -19,6 +19,7 @@ noUiSlider.create(sliderElement,
   connect: 'lower',}
 );
 
+
 formOpener.addEventListener('click', () => {
   imageToScale.style.filter = '';
   showSlider ('add');

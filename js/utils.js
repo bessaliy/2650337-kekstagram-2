@@ -36,6 +36,7 @@ function getCommentMessage() {
   return message.join(' ');
 }
 
+
 function getCommentName(name, surname) {
   let randomName = name[getRandomInteger(0, (name.length - 1))];
   let randomSurname = surname[getRandomInteger(0, (surname.length - 1))];
