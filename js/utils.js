@@ -22,8 +22,8 @@ export function getUniqueRandom (usedSet, min, max, errorMessage) {
 }
 
 function getCommentMessage() {
-  let message = [];
-  let usedMessages = [];
+  const message = [];
+  const usedMessages = [];
   const messageAmount = getRandomInteger(1, 2);
   for (let i = 1; i <= messageAmount; i++) {
     let newMessage = COMMENTS[getRandomInteger(0, (COMMENTS.length - 1))];
@@ -36,15 +36,16 @@ function getCommentMessage() {
   return message.join(' ');
 }
 
+
 function getCommentName(name, surname) {
-  let randomName = name[getRandomInteger(0, (name.length - 1))];
-  let randomSurname = surname[getRandomInteger(0, (surname.length - 1))];
+  const randomName = name[getRandomInteger(0, (name.length - 1))];
+  const randomSurname = surname[getRandomInteger(0, (surname.length - 1))];
   return `${randomName} ${randomSurname}`;
 }
 
 function generateComment () {
   const comment = [];
-  const id = getUniqueRandom(usedCommentId, 1, 750, `Не могу найти уникальный ID комментария после 750 попыток`);
+  const id = getUniqueRandom(usedCommentId, 1, 750, 'Не могу найти уникальный ID комментария после 750 попыток');
 
   comment.push({
     commentId: id,
@@ -57,12 +58,12 @@ function generateComment () {
 }
 
 const comments = (amount) => {
-  let commentBatch = [];
+  const commentBatch = [];
   for (let i = 0; i < amount; i++) {
     commentBatch.push(generateComment());
   }
   return commentBatch;
-}
+};
 
 function photoDescription (id, url) {
 
@@ -72,7 +73,7 @@ function photoDescription (id, url) {
     description: DESCRIPTION[getRandomInteger(0, (DESCRIPTION.length - 1))],
     likes: getRandomInteger(15, 200),
     comment: comments(getRandomInteger(1, 30))
-  }
+  };
 }
 
 const uploadedPhotos = (amount) => {
@@ -89,6 +90,6 @@ const uploadedPhotos = (amount) => {
     allPhotos.push(photoDescription(id, url));
   }
   return allPhotos;
-}
+};
 
 export { uploadedPhotos };

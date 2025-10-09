@@ -19,7 +19,7 @@ function changeEventListeners(action) {
 export function renderPhotos(picture) {
   const template = photoTemplate.cloneNode(true);
   const image = template.querySelector('.picture__img');
-  let fragment = document.createDocumentFragment();
+  const fragment = document.createDocumentFragment();
 
   template.photoData = picture;
   image.alt = picture.description;

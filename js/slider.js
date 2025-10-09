@@ -3,8 +3,8 @@ const scaleMinus = document.querySelector('.scale__control--smaller');
 const scaleValue = document.querySelector('.scale__control--value');
 const imageToScale = document.querySelector('.img-upload__preview');
 
-let sliderContainer = document.querySelector('.img-upload__effect-level');
-let sliderElement = document.querySelector('.effect-level__slider');
+const sliderContainer = document.querySelector('.img-upload__effect-level');
+const sliderElement = document.querySelector('.effect-level__slider');
 const effectNone = document.querySelector('#effect-none');
 const effectChrome = document.querySelector('#effect-chrome');
 const effectSepia = document.querySelector('#effect-sepia');
@@ -16,8 +16,9 @@ const formOpener = document.querySelector('.img-upload__start');
 
 noUiSlider.create(sliderElement,
   { range: { min: 0, max: 1, }, start: 0, step: 0.1,
-  connect: 'lower',}
+    connect: 'lower',}
 );
+
 
 formOpener.addEventListener('click', () => {
   imageToScale.style.filter = '';
@@ -46,7 +47,7 @@ effectChrome.addEventListener('change', (evt) => {
     );
 
     sliderElement.noUiSlider.on('update', () => {
-      imageToScale.style.filter = 'grayscale(' + sliderElement.noUiSlider.get() + ')';
+      imageToScale.style.filter = `grayscale(${sliderElement.noUiSlider.get()})`;
     });
   }
 });
@@ -59,7 +60,7 @@ effectSepia.addEventListener('change', (evt) => {
     );
 
     sliderElement.noUiSlider.on('update', () => {
-      imageToScale.style.filter = 'sepia(' + sliderElement.noUiSlider.get() + ')';
+      imageToScale.style.filter = `sepia(${sliderElement.noUiSlider.get()})`;
     });
   }
 });
@@ -72,7 +73,7 @@ effectMarvin.addEventListener('change', (evt) => {
     );
 
     sliderElement.noUiSlider.on('update', () => {
-      imageToScale.style.filter = 'invert(' + sliderElement.noUiSlider.get() + '%)';
+      imageToScale.style.filter = `invert(${sliderElement.noUiSlider.get()}%)`;
     });
   }
 });
@@ -85,7 +86,7 @@ effectPhobos.addEventListener('change', (evt) => {
     );
 
     sliderElement.noUiSlider.on('update', () => {
-      imageToScale.style.filter = 'blur(' + sliderElement.noUiSlider.get() + 'px)';
+      imageToScale.style.filter = `blur(${sliderElement.noUiSlider.get()}px)`;
     });
   }
 });
@@ -98,31 +99,31 @@ effectHeat.addEventListener('change', (evt) => {
     );
 
     sliderElement.noUiSlider.on('update', () => {
-      imageToScale.style.filter = 'brightness(' + sliderElement.noUiSlider.get() + ')';
+      imageToScale.style.filter = `brightness(${sliderElement.noUiSlider.get()})`;
     });
   }
 });
 
 scaleMinus.addEventListener('click', () => {
-  let scale = parseInt(scaleValue.value);
+  let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if (scale <= 100 && scale > 0 ) {
+  if(scale <= 100 && scale > 0) {
     scale -= 25;
     scalePercent = scale / 100;
-    scaleValue.value = scale + '%';
-    imageToScale.style.transform = 'scale(' + scalePercent + ')';
+    scaleValue.value = `${scale}%`;
+    imageToScale.style.transform = `scale(${scalePercent})`;
   }
 });
 scalePlus.addEventListener('click', () => {
-  let scale = parseInt(scaleValue.value);
+  let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if (scale < 100  && scale >= 0 ) {
+  if(scale < 100 && scale >= 0) {
     scale += 25;
     scalePercent = scale / 100;
-    scaleValue.value = scale + '%';
-    imageToScale.style.transform = 'scale(' + scalePercent + ')';
+    scaleValue.value = `${scale}%`;
+    imageToScale.style.transform = `scale(${scalePercent})`;
   }
 });
 
