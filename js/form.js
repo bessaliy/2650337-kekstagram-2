@@ -13,6 +13,8 @@ const commentField = document.querySelector('.text__description');
 
 const submitButtonText = submitButton.textContent;
 
+const successModal = sendTemplate.content.cloneNode(true).querySelector('.success');
+
 function blockSubmitButton() {
   submitButton.disabled = true;
   submitButton.textContent = 'Публикую...';
@@ -22,14 +24,18 @@ function unblockSubmitButton() {
   submitButton.disabled = false;
   submitButton.textContent = submitButtonText;
 }
-
+function closeSuccessModal() {
+  // const successModal = sendTemplate.content.cloneNode(true).querySelector('.success');
+  successModal.remove();
+  changeEventListeners('remove');
+}
 function handleEscapeKey(evt) {
   if (evt.key === 'Escape') {
     const excludedFields = [hashtagField, commentField];
     const activeElement = document.activeElement;
 
     let shouldClose = true;
-    excludedFields.forEach(field => {
+    excludedFields.forEach((field) => {
       if (field === activeElement) {
         shouldClose = false;
       }
@@ -60,6 +66,12 @@ function changeEventListeners(action) {
   document[method]('click', onOutsideClick);
 }
 
+const pristine = new Pristine (form, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+}, false);
+
 function resetForm() {
   form.reset();
   pristine.reset();
@@ -87,11 +99,6 @@ function closeForm() {
   resetForm();
 }
 
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-}, false);
 
 formOpener.addEventListener('click', () => {
   switchForm('remove', 'add');
@@ -123,7 +130,7 @@ function validateHashRepeat(value) {
     return true;
   }
   const hashtags = value.split(' ');
-  const hashtagsLowerCase = hashtags.map(str => str.toLowerCase());
+  const hashtagsLowerCase = hashtags.map((str) => str.toLowerCase());
   for (let i = 0; i < hashtagsLowerCase.length; i++) {
     for (let j = i + 1; j < hashtagsLowerCase.length; j++) {
       if (hashtagsLowerCase[i] === hashtagsLowerCase[j]) {
@@ -156,15 +163,9 @@ pristine.addValidator(
 );
 
 function showSuccessMessage() {
-  const successModal = sendTemplate.content.cloneNode(true).querySelector('.success');
   const successButton = successModal.querySelector('.success__button');
 
   document.body.appendChild(successModal);
-
-  function closeSuccessModal() {
-    successModal.remove();
-    changeEventListeners('remove');
-  }
 
   successButton.addEventListener('click', closeSuccessModal);
   changeEventListeners('add');
@@ -211,7 +212,6 @@ form.addEventListener('submit', async (evt) => {
     showSuccessMessage();
 
   } catch (error) {
-    console.error('Ошибка отправки формы:', error);
     showErrorMessage();
 
   } finally {

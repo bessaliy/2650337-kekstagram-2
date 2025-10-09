@@ -34,7 +34,7 @@ function showDefault() {
 
 function showRandom() {
   clearAll();
-  let randomSet = new Set();
+  const randomSet = new Set();
 
   for (let i = 0; i < 10; i++) {
 
@@ -42,9 +42,8 @@ function showRandom() {
     const picture = photosData[number];
     renderPhotos(picture);
     randomSet.add(number);
-    console.log(randomSet);
-    }
   }
+}
 
 function showDiscussed() {
   clearAll();
