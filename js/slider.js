@@ -108,7 +108,7 @@ scaleMinus.addEventListener('click', () => {
   let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if(scale <= 100 && scale > 0) {
+  if(scale <= 100 && scale > 25) {
     scale -= 25;
     scalePercent = scale / 100;
     scaleValue.value = `${scale}%`;
@@ -119,7 +119,7 @@ scalePlus.addEventListener('click', () => {
   let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if(scale < 100 && scale >= 0) {
+  if(scale < 100 && scale >= 25) {
     scale += 25;
     scalePercent = scale / 100;
     scaleValue.value = `${scale}%`;
