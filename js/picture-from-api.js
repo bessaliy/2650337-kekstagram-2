@@ -11,11 +11,7 @@ const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');
 const showMoreComments = openBigPicture.querySelector('.social__comments-loader');
 
-const changeEventListeners = (action) => {
-  const method = `${action}EventListener`;
-  document[method]('keydown', handleEscapeKey);
-  closeBigPicture[method]('click', closeModal);
-}
+
 export const renderPhotos = (picture) => {
   const template = photoTemplate.cloneNode(true);
   const image = template.querySelector('.picture__img');
@@ -34,9 +30,9 @@ export const renderPhotos = (picture) => {
     onClickOpenModal(template);
   });
   container.append(fragment);
-}
-let onCurrentLoadMoreHandler = null;
+};
 
+let onCurrentLoadMoreHandler = null;
 let photosData = [];
 
 export const getPhotosData = () => photosData;
@@ -68,15 +64,21 @@ const showDataError = (method) => {
       errorSection.remove();
     }
   }, 5000);
-}
+};
 
 document.addEventListener('DOMContentLoaded', onLoadRenderPhotos);
 
-const handleEscapeKey = (evt) => {
+const onHandleEscapeKey = (evt) => {
   if (evt.key === 'Escape') {
     closeModal();
   }
-}
+};
+
+const changeEventListeners = (action) => {
+  const method = `${action}EventListener`;
+  document[method]('keydown', onHandleEscapeKey);
+  closeBigPicture[method]('click', closeModal);
+};
 
 const closeModal = () => {
   openBigPicture.classList.add('hidden');
@@ -88,7 +90,7 @@ const closeModal = () => {
     showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
     onCurrentLoadMoreHandler = null;
   }
-}
+};
 
 const renderComments = (comments, commentList, fragment) => {
   comments.forEach((comment) => {
@@ -104,14 +106,14 @@ const renderComments = (comments, commentList, fragment) => {
     fragment.appendChild(template);
   });
   return fragment;
-}
+};
 export const onClickOpenModal = (thumbnail) => {
   if (onCurrentLoadMoreHandler) {
     showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
     onCurrentLoadMoreHandler = null;
   }
 
-  document.removeEventListener('keydown', handleEscapeKey);
+  document.removeEventListener('keydown', onHandleEscapeKey);
   closeBigPicture.removeEventListener('click', closeModal);
 
   const commentAmount = openBigPicture.querySelector('.social__comment-total-count');
@@ -171,4 +173,4 @@ export const onClickOpenModal = (thumbnail) => {
     showMoreComments.addEventListener('click', onCurrentLoadMoreHandler);
   }
   changeEventListeners('add');
-}
+};

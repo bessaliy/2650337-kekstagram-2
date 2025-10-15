@@ -22,16 +22,15 @@ noUiSlider.create(sliderElement,
     connect: 'lower',}
 );
 
+const showSlider = (param) => {
+  sliderContainer.classList[param]('hidden');
+};
 
 formOpener.addEventListener('click', () => {
   imageToScale.style.filter = '';
   showSlider ('add');
   imageToScale.style.transform = 'scale(1)';
 });
-
-const showSlider = (param) => {
-  sliderContainer.classList[param]('hidden');
-}
 
 effectNone.addEventListener('change', (evt) => {
   if (evt.target.checked) {

@@ -26,6 +26,12 @@ const unblockSubmitButton = () => {
   submitButton.textContent = submitButtonText;
 };
 
+const changeEventListeners = (action) => {
+  const method = `${action}EventListener`;
+  document[method]('keydown', onEscPress);
+  document[method]('click', onOutsideClick);
+};
+
 const onCloseSuccessModal = () => {
   successModal.remove();
   changeEventListeners('remove');
@@ -34,6 +40,16 @@ const onCloseSuccessModal = () => {
 const onCloseErrorModal = () => {
   errorModal.remove();
   changeEventListeners('remove');
+};
+
+const switchForm = (param1, param2) => {
+  formWindow.classList[param1]('hidden');
+  document.querySelector('body').classList[param2]('modal-open');
+};
+
+const onCloseForm = () => {
+  switchForm('add', 'remove');
+  resetForm();
 };
 
 const onHandleEscapeKey = (evt) => {
@@ -68,17 +84,6 @@ const onOutsideClick = (evt) => {
   }
 };
 
-const switchForm = (param1, param2) => {
-  formWindow.classList[param1]('hidden');
-  document.querySelector('body').classList[param2]('modal-open');
-};
-
-const changeEventListeners = (action) => {
-  const method = `${action}EventListener`;
-  document[method]('keydown', onEscPress);
-  document[method]('click', onOutsideClick);
-};
-
 const pristine = new Pristine (form, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -105,11 +110,6 @@ const resetForm = () => {
   if (effectLevel) {
     effectLevel.classList.add('hidden');
   }
-}
-
-const onCloseForm = () => {
-  switchForm('add', 'remove');
-  resetForm();
 };
 
 
@@ -152,7 +152,7 @@ const validateHashRepeat = (value) => {
     }
   }
   return true;
-}
+};
 
 pristine.addValidator(
   commentField,
@@ -182,14 +182,14 @@ const showSuccessMessage = () => {
 
   successButton.addEventListener('click', onCloseSuccessModal);
   changeEventListeners('add');
-}
+};
 
 const showErrorMessage = () => {
   document.body.appendChild(errorModal);
 
   errorButton.addEventListener('click', onCloseErrorModal);
   changeEventListeners('add');
-}
+};
 
 form.addEventListener('submit', async (evt) => {
   evt.preventDefault();
