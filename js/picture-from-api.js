@@ -11,12 +11,12 @@ const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');
 const showMoreComments = openBigPicture.querySelector('.social__comments-loader');
 
-function changeEventListeners(action) {
+const changeEventListeners = (action) => {
   const method = `${action}EventListener`;
   document[method]('keydown', handleEscapeKey);
   closeBigPicture[method]('click', closeModal);
 }
-export function renderPhotos(picture) {
+export const renderPhotos = (picture) => {
   const template = photoTemplate.cloneNode(true);
   const image = template.querySelector('.picture__img');
   const fragment = document.createDocumentFragment();
@@ -35,9 +35,13 @@ export function renderPhotos(picture) {
   });
   container.append(fragment);
 }
-let currentLoadMoreHandler = null;
-export let photosData = [];
-export const loadAndRenderPhotos = async () => {
+let onCurrentLoadMoreHandler = null;
+
+let photosData = [];
+
+export const getPhotosData = () => photosData;
+
+export const onLoadRenderPhotos = async () => {
   try {
     photosData = await getData(Route.GET_DATA, Method.GET);
     photosData.forEach((picture) => {
@@ -51,7 +55,7 @@ export const loadAndRenderPhotos = async () => {
   }
 };
 
-function showDataError(method) {
+const showDataError = (method) => {
 
   const errorElement = errorTemplate.content.cloneNode(true);
   errorElement.querySelector('h2').textContent = ErrorText[method];
@@ -66,27 +70,27 @@ function showDataError(method) {
   }, 5000);
 }
 
-document.addEventListener('DOMContentLoaded', loadAndRenderPhotos);
+document.addEventListener('DOMContentLoaded', onLoadRenderPhotos);
 
-function handleEscapeKey(evt) {
+const handleEscapeKey = (evt) => {
   if (evt.key === 'Escape') {
     closeModal();
   }
 }
 
-function closeModal() {
+const closeModal = () => {
   openBigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
 
   changeEventListeners('remove');
 
-  if (currentLoadMoreHandler) {
-    showMoreComments.removeEventListener('click', currentLoadMoreHandler);
-    currentLoadMoreHandler = null;
+  if (onCurrentLoadMoreHandler) {
+    showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
+    onCurrentLoadMoreHandler = null;
   }
 }
 
-function renderComments(comments, commentList, fragment) {
+const renderComments = (comments, commentList, fragment) => {
   comments.forEach((comment) => {
     const template = commentList.querySelector('li').cloneNode(true);
 
@@ -101,10 +105,10 @@ function renderComments(comments, commentList, fragment) {
   });
   return fragment;
 }
-export function onClickOpenModal (thumbnail) {
-  if (currentLoadMoreHandler) {
-    showMoreComments.removeEventListener('click', currentLoadMoreHandler);
-    currentLoadMoreHandler = null;
+export const onClickOpenModal = (thumbnail) => {
+  if (onCurrentLoadMoreHandler) {
+    showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
+    onCurrentLoadMoreHandler = null;
   }
 
   document.removeEventListener('keydown', handleEscapeKey);
@@ -148,7 +152,7 @@ export function onClickOpenModal (thumbnail) {
 
     commentList.replaceChildren(commentFragment);
 
-    currentLoadMoreHandler = () => {
+    onCurrentLoadMoreHandler = () => {
       if (restComments.length > 0) {
         showingComments = restComments.splice(0, COMMENTS_ON_SHOW);
         shownCommentsAmount += showingComments.length;
@@ -164,7 +168,7 @@ export function onClickOpenModal (thumbnail) {
       }
     };
 
-    showMoreComments.addEventListener('click', currentLoadMoreHandler);
+    showMoreComments.addEventListener('click', onCurrentLoadMoreHandler);
   }
   changeEventListeners('add');
 }

@@ -1,4 +1,4 @@
-import {container, photosData, loadAndRenderPhotos, renderPhotos} from './picture-from-api.js';
+import {container, getPhotosData, onLoadRenderPhotos, renderPhotos} from './picture-from-api.js';
 import {getUniqueRandom} from './utils.js';
 import {debounce} from './main.js';
 
@@ -20,40 +20,40 @@ buttons.forEach((button) => {
   });
 });
 
-function clearAll() {
+const clearAll = () => {
   const photoElements = container.querySelectorAll('.picture');
   photoElements.forEach((element) => element.remove());
-}
+};
 
-function showDefault() {
+const showDefault = () => {
   clearAll();
-  loadAndRenderPhotos().catch((error) => {
+  onLoadRenderPhotos().catch((error) => {
     throw new Error(error);
   });
-}
+};
 
-function showRandom() {
+const showRandom = () => {
   clearAll();
   const randomSet = new Set();
 
   for (let i = 0; i < 10; i++) {
 
     const number = getUniqueRandom(randomSet, 0, 24, 'Не могу придумать новое число');
-    const picture = photosData[number];
+    const picture = getPhotosData()[number];
     renderPhotos(picture);
     randomSet.add(number);
   }
-}
+};
 
-function showDiscussed() {
+const showDiscussed = () => {
   clearAll();
-  const descendingCommentsPhotos = photosData.sort((a, b) =>
+  const descendingCommentsPhotos = getPhotosData().sort((a, b) =>
     b.comments.length - a.comments.length
   );
   descendingCommentsPhotos.forEach((picture) => {
     renderPhotos(picture);
   });
-}
+};
 
 
 const debouncedShowDefault = debounce(showDefault);

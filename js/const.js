@@ -1,4 +1,4 @@
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   'Тяжелый день на болоте. Заказ пиццы – единственная активность на вечер.',
   'Этот вазон сам бросился под меня. Я лишь попытался его спасти.',
   'Моё лицо, когда ты в третий раз рассказываешь эту историю.',
@@ -59,4 +59,4 @@ const SURNAMES = [
   'Тапочкин'
 ];
 
-export {DESCRIPTION, COMMENTS, NAMES, SURNAMES};
+export {DESCRIPTIONS, COMMENTS, NAMES, SURNAMES};

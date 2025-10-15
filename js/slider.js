@@ -1,8 +1,12 @@
+const MAX_SCALE = 100;
+const MIN_SCALE = 25;
+const SCALE_STEP = 25;
+const PERCENT_BASE = 100;
+
 const scalePlus = document.querySelector('.scale__control--bigger');
 const scaleMinus = document.querySelector('.scale__control--smaller');
 const scaleValue = document.querySelector('.scale__control--value');
-const imageToScale = document.querySelector('.img-upload__preview');
-
+const imageToScale = document.querySelector('.img-upload__preview img');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectNone = document.querySelector('#effect-none');
@@ -11,7 +15,6 @@ const effectSepia = document.querySelector('#effect-sepia');
 const effectMarvin = document.querySelector('#effect-marvin');
 const effectPhobos = document.querySelector('#effect-phobos');
 const effectHeat = document.querySelector('#effect-heat');
-
 const formOpener = document.querySelector('.img-upload__start');
 
 noUiSlider.create(sliderElement,
@@ -26,7 +29,7 @@ formOpener.addEventListener('click', () => {
   imageToScale.style.transform = 'scale(1)';
 });
 
-function showSlider (param) {
+const showSlider = (param) => {
   sliderContainer.classList[param]('hidden');
 }
 
@@ -108,9 +111,9 @@ scaleMinus.addEventListener('click', () => {
   let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if(scale <= 100 && scale > 25) {
-    scale -= 25;
-    scalePercent = scale / 100;
+  if(scale <= MAX_SCALE && scale > MIN_SCALE) {
+    scale -= SCALE_STEP;
+    scalePercent = scale / PERCENT_BASE;
     scaleValue.value = `${scale}%`;
     imageToScale.style.transform = `scale(${scalePercent})`;
   }
@@ -119,9 +122,9 @@ scalePlus.addEventListener('click', () => {
   let scale = parseInt(scaleValue.value, 10);
   let scalePercent;
 
-  if(scale < 100 && scale >= 25) {
-    scale += 25;
-    scalePercent = scale / 100;
+  if(scale < MAX_SCALE && scale >= MIN_SCALE) {
+    scale += SCALE_STEP;
+    scalePercent = scale / PERCENT_BASE;
     scaleValue.value = `${scale}%`;
     imageToScale.style.transform = `scale(${scalePercent})`;
   }
