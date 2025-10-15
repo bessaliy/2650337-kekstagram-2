@@ -70,19 +70,19 @@ const onHandleEscapeKey = (evt) => {
   }
 };
 
-const onEscPress = (evt) => {
+function onEscPress(evt) {
   if (evt.key === 'Escape') {
 
     onCloseSuccessModal();
     onCloseErrorModal();
   }
-};
+}
 
-const onOutsideClick = (evt) => {
+function onOutsideClick(evt) {
   if (!evt.target.closest('.success__inner')) {
     onCloseSuccessModal();
   }
-};
+}
 
 const pristine = new Pristine (form, {
   classTo: 'img-upload__field-wrapper',
@@ -90,7 +90,7 @@ const pristine = new Pristine (form, {
   errorTextClass: 'img-upload__field-wrapper--error',
 }, false);
 
-const resetForm = () => {
+function resetForm() {
   form.reset();
   pristine.reset();
 
@@ -110,7 +110,7 @@ const resetForm = () => {
   if (effectLevel) {
     effectLevel.classList.add('hidden');
   }
-};
+}
 
 
 formOpener.addEventListener('click', () => {

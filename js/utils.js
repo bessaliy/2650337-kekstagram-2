@@ -44,17 +44,17 @@ const getCommentName = (name, surname) => {
 };
 
 const generateComment = () => {
-  let comment;
+
   const id = getUniqueRandom(usedCommentId, 1, 750, 'Не могу найти уникальный ID комментария после 750 попыток');
 
-  comment = {
+  const commentBody = {
     commentId: id,
     commentUrl: `img/avatar-${getRandomInteger(1, 6)}.svg`,
     commentMessage: getCommentMessage(),
     commentName: getCommentName(NAMES, SURNAMES)
   };
 
-  return comment
+  return commentBody;
 };
 
 const comments = (amount) => {

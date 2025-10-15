@@ -11,6 +11,20 @@ const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');
 const showMoreComments = openBigPicture.querySelector('.social__comments-loader');
 
+const showDataError = (method) => {
+
+  const errorElement = errorTemplate.content.cloneNode(true);
+  errorElement.querySelector('h2').textContent = ErrorText[method];
+
+  document.body.appendChild(errorElement);
+
+  setTimeout(() => {
+    const errorSection = document.querySelector('.data-error');
+    if (errorSection) {
+      errorSection.remove();
+    }
+  }, 5000);
+};
 
 export const renderPhotos = (picture) => {
   const template = photoTemplate.cloneNode(true);
@@ -51,21 +65,6 @@ export const onLoadRenderPhotos = async () => {
   }
 };
 
-const showDataError = (method) => {
-
-  const errorElement = errorTemplate.content.cloneNode(true);
-  errorElement.querySelector('h2').textContent = ErrorText[method];
-
-  document.body.appendChild(errorElement);
-
-  setTimeout(() => {
-    const errorSection = document.querySelector('.data-error');
-    if (errorSection) {
-      errorSection.remove();
-    }
-  }, 5000);
-};
-
 document.addEventListener('DOMContentLoaded', onLoadRenderPhotos);
 
 const onHandleEscapeKey = (evt) => {
@@ -80,7 +79,7 @@ const changeEventListeners = (action) => {
   closeBigPicture[method]('click', closeModal);
 };
 
-const closeModal = () => {
+function closeModal() {
   openBigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
 
@@ -90,7 +89,7 @@ const closeModal = () => {
     showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
     onCurrentLoadMoreHandler = null;
   }
-};
+}
 
 const renderComments = (comments, commentList, fragment) => {
   comments.forEach((comment) => {
@@ -107,7 +106,7 @@ const renderComments = (comments, commentList, fragment) => {
   });
   return fragment;
 };
-export const onClickOpenModal = (thumbnail) => {
+export function onClickOpenModal(thumbnail) {
   if (onCurrentLoadMoreHandler) {
     showMoreComments.removeEventListener('click', onCurrentLoadMoreHandler);
     onCurrentLoadMoreHandler = null;
@@ -173,4 +172,4 @@ export const onClickOpenModal = (thumbnail) => {
     showMoreComments.addEventListener('click', onCurrentLoadMoreHandler);
   }
   changeEventListeners('add');
-};
+}
