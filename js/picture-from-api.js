@@ -1,11 +1,10 @@
 import { photoTemplate, errorTemplate } from './templates.js';
 import {getData, Method, Route, ErrorText} from './api.js';
 
-export const container = document.querySelector('.pictures');
-const photosTotal = [];
-
 const COMMENTS_ON_SHOW = 5;
 
+export const container = document.querySelector('.pictures');
+const photosTotal = [];
 const openBigPicture = document.querySelector('.big-picture');
 const bigPicture = document.querySelector('.big-picture__img');
 const closeBigPicture = document.querySelector('.big-picture__cancel');

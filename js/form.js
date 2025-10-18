@@ -15,6 +15,11 @@ const successModal = sendTemplate.content.cloneNode(true).querySelector('.succes
 const errorElement = sendErrorTemplate.content.cloneNode(true);
 const errorModal = errorElement.querySelector('.error');
 const errorButton = errorModal.querySelector('.error__button');
+let successShown = false;
+let errorShown = false;
+
+let shouldCloseForm = true;
+let errorMessageShown = false;
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -28,7 +33,7 @@ const unblockSubmitButton = () => {
 
 const changeEventListeners = (action) => {
   const method = `${action}EventListener`;
-  document[method]('keydown', onEscPress);
+  document[method]('keydown', onHandleEscapeKey);
   document[method]('click', onOutsideClick);
 };
 
@@ -40,6 +45,7 @@ const onCloseSuccessModal = () => {
 const onCloseErrorModal = () => {
   errorModal.remove();
   changeEventListeners('remove');
+  shouldCloseForm = true;
 };
 
 const switchForm = (param1, param2) => {
@@ -51,32 +57,38 @@ const onCloseForm = () => {
   switchForm('add', 'remove');
   resetForm();
 };
-
 const onHandleEscapeKey = (evt) => {
   if (evt.key === 'Escape') {
+
     const excludedFields = [hashtagField, commentField];
     const activeElement = document.activeElement;
+    shouldCloseForm = true;
 
-    let shouldClose = true;
     excludedFields.forEach((field) => {
       if (field === activeElement) {
-        shouldClose = false;
+        shouldCloseForm = false;
       }
     });
 
-    if (shouldClose) {
+    if (errorShown) {
+      shouldCloseForm = false;
+      errorShown = false;
+      onCloseErrorModal();
+      document.addEventListener('keydown', onHandleEscapeKey);
+      return;
+    }
+
+    if (successShown) {
+      onCloseSuccessModal();
+    }
+
+    if (shouldCloseForm) {
       onCloseForm();
     }
   }
+  shouldCloseForm = true;
 };
 
-function onEscPress(evt) {
-  if (evt.key === 'Escape') {
-
-    onCloseSuccessModal();
-    onCloseErrorModal();
-  }
-}
 
 function onOutsideClick(evt) {
   if (!evt.target.closest('.success__inner')) {
@@ -111,7 +123,6 @@ function resetForm() {
     effectLevel.classList.add('hidden');
   }
 }
-
 
 formOpener.addEventListener('click', () => {
   switchForm('remove', 'add');
@@ -182,13 +193,16 @@ const showSuccessMessage = () => {
 
   successButton.addEventListener('click', onCloseSuccessModal);
   changeEventListeners('add');
+  successShown = true;
 };
 
 const showErrorMessage = () => {
   document.body.appendChild(errorModal);
+  errorMessageShown = true;
 
   errorButton.addEventListener('click', onCloseErrorModal);
   changeEventListeners('add');
+  errorShown = true;
 };
 
 form.addEventListener('submit', async (evt) => {
@@ -224,7 +238,6 @@ form.addEventListener('submit', async (evt) => {
 });
 
 formCloseBtn.addEventListener('click', onCloseForm);
-document.addEventListener('keydown', onHandleEscapeKey);
 
 const cancelButton = document.querySelector('.img-upload__cancel');
 if (cancelButton) {
