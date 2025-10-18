@@ -57,7 +57,7 @@ const onCloseForm = () => {
   switchForm('add', 'remove');
   resetForm();
 };
-function onHandleEscapeKey(evt)  {
+function onHandleEscapeKey(evt) {
   if (evt.key === 'Escape') {
 
     const excludedFields = [hashtagField, commentField];
