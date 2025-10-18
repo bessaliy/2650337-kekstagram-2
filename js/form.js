@@ -15,11 +15,11 @@ const successModal = sendTemplate.content.cloneNode(true).querySelector('.succes
 const errorElement = sendErrorTemplate.content.cloneNode(true);
 const errorModal = errorElement.querySelector('.error');
 const errorButton = errorModal.querySelector('.error__button');
+
 let successShown = false;
 let errorShown = false;
-
 let shouldCloseForm = true;
-let errorMessageShown = false;
+
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -57,7 +57,7 @@ const onCloseForm = () => {
   switchForm('add', 'remove');
   resetForm();
 };
-const onHandleEscapeKey = (evt) => {
+function onHandleEscapeKey(evt)  {
   if (evt.key === 'Escape') {
 
     const excludedFields = [hashtagField, commentField];
@@ -87,7 +87,7 @@ const onHandleEscapeKey = (evt) => {
     }
   }
   shouldCloseForm = true;
-};
+}
 
 
 function onOutsideClick(evt) {
@@ -198,8 +198,6 @@ const showSuccessMessage = () => {
 
 const showErrorMessage = () => {
   document.body.appendChild(errorModal);
-  errorMessageShown = true;
-
   errorButton.addEventListener('click', onCloseErrorModal);
   changeEventListeners('add');
   errorShown = true;
